@@ -39,13 +39,16 @@ If( Compare-Object -ReferenceObject $(Get-Content "$AppName old.txt") -Differenc
 #Find app update and sand email
  {  
     $MyEmail = "ExampleMail@gmail.com"
+    $Password = 'PASSWORD' 
     $SMTP= "smtp.gmail.com"
     $To = "ExampleMail@gmail.com"
     $Subject = "$AppName new update"
     $Body = "$AppName has been updated! Last version is from $UpdateDate. Available at the $url"
-    $Creds = (Get-Credential -Credential "$MyEmail")
- 
-    Send-MailMessage -To $to -From $MyEmail -Subject $Subject -Body $Body -SmtpServer $SMTP -Credential $Creds -UseSsl -Port 587 -DeliveryNotificationOption never
+    
+    $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force  
+    $Creds = New-Object "System.Management.Automation.PSCredential" -ArgumentList $MyEmail,$SecurePassword
+
+    Send-MailMessage -To $To -From $MyEmail -Subject $Subject -Body $Body -SmtpServer $SMTP -Credential $Creds -UseSsl -Port 587 -DeliveryNotificationOption never
   }
 
 #No app update
