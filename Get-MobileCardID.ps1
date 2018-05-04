@@ -36,6 +36,7 @@ else {
         $IMEI = $get_iccid | Where {$_ -Match "Sim ICC Id"}
         $IMEI = $IMEI.Substring($IMEI.get_Length() - 13)
         "$comp , $user , $IMEI " | Out-File $outfile -Append
+        
     }
 
 }
