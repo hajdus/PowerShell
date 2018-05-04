@@ -36,22 +36,23 @@ Function Get-AppUpdateDate {
 
     #Compare old and new data from txt files
     If ( Compare-Object -ReferenceObject $(Get-Content "$AppName old.txt") -DifferenceObject $(Get-Content "$AppName new.txt"))
-    #Find app update and sand email {  
-    $MyEmail = "ExampleMail@gmail.com"
-    $Password = 'PASSWORD' 
-    $SMTP = "smtp.gmail.com"
-    $To = "ExampleMail@gmail.com"
-    $Subject = "$AppName new update"
-    $Body = "$AppName has been updated! Last version is from $UpdateDate. Available at the $url"
+    {
+        #Find app update and sand email  
+        $MyEmail = "ExampleMail@gmail.com"
+        $Password = 'PASSWORD' 
+        $SMTP = "smtp.gmail.com"
+        $To = "ExampleMail@gmail.com"
+        $Subject = "$AppName new update"
+        $Body = "$AppName has been updated! Last version is from $UpdateDate. Available at the $url"
     
-    $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force  
-    $Creds = New-Object "System.Management.Automation.PSCredential" -ArgumentList $MyEmail, $SecurePassword
+        $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force  
+        $Creds = New-Object "System.Management.Automation.PSCredential" -ArgumentList $MyEmail, $SecurePassword
 
-    Send-MailMessage -To $To -From $MyEmail -Subject $Subject -Body $Body -SmtpServer $SMTP -Credential $Creds -UseSsl -Port 587 -DeliveryNotificationOption never
-}
+        Send-MailMessage -To $To -From $MyEmail -Subject $Subject -Body $Body -SmtpServer $SMTP -Credential $Creds -UseSsl -Port 587 -DeliveryNotificationOption never
+    }
 
-#No app update
-Else {}
+    #No app update
+    Else {}
  
 }
 
