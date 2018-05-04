@@ -19,29 +19,24 @@ $get_iccid = cmd /c "netsh mbn sh read i=*"
 $comp = $env:COMPUTERNAME
 $user = $env:USERNAME
 
-if ($get_meid -match "not running." )
-    {
+if ($get_meid -match "not running." ) {
     
     Exit
-    }
+}
 
-if ($get_meid -match "was not found." )
-    {
+if ($get_meid -match "was not found." ) {
     Exit
+}
+
+else {
+    if (Get-Content $outfile | Select-String  $comp) {
+        Exit   
+    }
+    else {
+        $IMEI = $get_iccid | Where {$_ -Match "Sim ICC Id"}
+        $IMEI = $IMEI.Substring($IMEI.get_Length() - 13)
+        "$comp , $user , $IMEI " | Out-File $outfile -Append
     }
 
-else
-    {
-      if (Get-Content $outfile | Select-String  $comp)
-         {
-         Exit   
-        }
-     else
-        {
-          $IMEI = $get_iccid | Where {$_ -Match "Sim ICC Id"}
-          $IMEI = $IMEI.Substring($IMEI.get_Length()-13)
-          "$comp , $user , $IMEI " | Out-File $outfile -Append
-        }
-
-    }
+}
 
