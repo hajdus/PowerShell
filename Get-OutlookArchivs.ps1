@@ -58,8 +58,7 @@ do {
             else {
                 
                 $arch = Get-Variable -name "arch$input" -ValueOnly
-
-                                
+                            
                 $namespace.AddStore("$arch")
                 Write-Host "Add archive $arch" -ForegroundColor Green
             }
