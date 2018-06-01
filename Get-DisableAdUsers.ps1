@@ -12,7 +12,7 @@ autor: hajdus 2018
 $desktop = [Environment]::GetFolderPath("Desktop")
 
 get-aduser -Filter * -SearchBase "DC=DC,DC=corp"  -properties name, LastLogonDate, Enabled |
-Where-Object {$_.Enabled -like "False"} |
-Select name, LastLogonDate |
-out-file $desktop\DisableUsers.txt -fo -en UTF8 
+    Where-Object {$_.Enabled -like "False"} |
+    Select name, LastLogonDate |
+    out-file $desktop\DisableUsers.txt -fo -en UTF8 
 
