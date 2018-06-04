@@ -65,24 +65,19 @@ xml=<wiInputForm source='ibase'>
 
     #if current date is lower then warranty end date then color row green
     if ($date -lt $WED[0]) {
-        ConvertTo-Html -Body "<Table border=1>
-        <TR>
-        <TD width=250px  bgcolor=green>$ProductName</TD>
-        <TD width=250px  bgcolor=green>$SerialNumber</TD>
-        <TD width=250px bgcolor=green>$WED</TD>
-        </TR>
-        </table>" | Out-File -Append "$FilePath\Lenovo.html"
+       $color = "green"
     }
 
     #if current date is grater then warranty end date then color row red
     else {
-        ConvertTo-Html -Body "<Table border=1>
-    <TR>
-    <TD width=250px bgcolor=red>$ProductName</TD>
-    <TD width=250px bgcolor=red>$SerialNumber</TD>
-    <TD width=250px bgcolor=red>$WED</TD>
-    </TR>
-    </table>" | Out-File -Append "$FilePath\Lenovo.html" 
+        $color = "red"
+         
     }
-
+    ConvertTo-Html -Body "<Table border=1>
+    <TR>
+    <TD width=250px bgcolor=$color>$ProductName</TD>
+    <TD width=250px bgcolor=$color>$SerialNumber</TD>
+    <TD width=250px bgcolor=$color>$WED</TD>
+    </TR>
+    </table>" | Out-File -Append "$FilePath\Lenovo.html"
 }
