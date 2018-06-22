@@ -1,0 +1,21 @@
+
+Param(
+  [Parameter(Mandatory=$true)] [String]$user
+)
+
+[xml]$xml = Get-GPOReport -Name "USR#CONF#Mapowanie_Dyskow" -ReportType XML
+$grups = Get-ADPrincipalGroupMembership $user | ? name -Match "Centrala-" | select name 
+
+ 
+
+  
+
+  $grups | %{
+  
+  $name = $_.name
+  
+   
+   $xml.GPO.User.ExtensionData.Extension.DriveMapSettings.Drive  |
+    % { if ($_.Filters.FilterGroup.name  -match $name ) {Write-host "net use " $_.name $_.Properties.path "/persistent:yes"} } 
+  }  
+
