@@ -1,3 +1,16 @@
+<#
+.SYNOPSIS
+    Get all AD User by job title
+.DESCRIPTION
+    
+.EXAMPLE
+    Get-DiskFromGPO.ps1 -jsmith
+   .\Get-DiskFromGPO.ps1 -user jsmith
+.NOTES
+    autor: hajdus 2018
+#>
+
+
 
 Param(
   [Parameter(Mandatory=$true)] [String]$user
@@ -5,17 +18,29 @@ Param(
 
 [xml]$xml = Get-GPOReport -Name "USR#CONF#Mapowanie_Dyskow" -ReportType XML
 $grups = Get-ADPrincipalGroupMembership $user | ? name -Match "Centrala-" | select name 
-
- 
-
-  
-
-  $grups | %{
-  
-  $name = $_.name
-  
    
+   $FilePath = "$env:HOMEPATH\Desktop"
+
+   #Check if output file exist
+if (Test-Path "$FilePath\$user.bat" -PathType Leaf) {
+    Remove-Item "$FilePath\$user.bat" 
+}
+
+Clear-Host
+Write-Host -ForegroundColor Green "Utworzono plik bat $FilePath\$user.bat"
+Write-Host -ForegroundColor Yellow "Zawartość:"
+  $grups | %{  
+  $name = $_.name   
    $xml.GPO.User.ExtensionData.Extension.DriveMapSettings.Drive  |
-    % { if ($_.Filters.FilterGroup.name  -match $name ) {Write-host "net use " $_.name $_.Properties.path "/persistent:yes"} } 
+    % { if ($_.Filters.FilterGroup.name  -match $name ) {
+    $Tekst = "net use " + $_.name + " " + $_.Properties.path + " /persistent:yes"  
+       
+    $Tekst | Out-File -Append -FilePath "$FilePath\$user.bat" -Encoding ascii
+    
+    $Tekst
+    } 
+
+   
+    } 
   }  
 
