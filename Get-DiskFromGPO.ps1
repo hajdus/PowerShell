@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-    Get all AD User by job title
+    Find and create bat file to map disk for user
 .DESCRIPTION
-    
+    Find and create bat file to map disk for user
 .EXAMPLE
     Get-DiskFromGPO.ps1 -jsmith
    .\Get-DiskFromGPO.ps1 -user jsmith
