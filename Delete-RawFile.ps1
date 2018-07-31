@@ -9,6 +9,9 @@
     autor: hajdus 2018
 #>
 
+# 1..10 | % { New-Item -Name "$_.raw" -ItemType file}
+# 1..5 | % { New-Item -Name "$_.jpg" -ItemType file}
+
 Write-Host -ForegroundColor Yellow "Wybiesz folder"
 Add-Type -AssemblyName System.Windows.Forms
 $FolderBrowser = New-Object System.Windows.Forms.FolderBrowserDialog
@@ -24,8 +27,8 @@ else {
 $Obiekty = Get-ChildItem -Path $Folder 
 $count = 0
 $ToNatural = { [regex]::Replace($_, '\d+', { $args[0].Value.PadLeft(20) }) }
-$raw = $Obiekty | ? {$_.Extension -eq ".raw"} | Sort-Object $ToNatural | select Fullname 
-$jpg = $Obiekty | ? {$_.Extension -eq ".jpg"} | Sort-Object $ToNatural | select Fullname 
+$raw = $Obiekty | ? {$_.Extension -eq ".raw"} | Sort-Object $ToNatural | select basename
+$jpg = $Obiekty | ? {$_.Extension -eq ".jpg"} | Sort-Object $ToNatural | select basename
 
 if (($raw -eq $null) -or ($jpg -eq $null)) {
     Write-Host -ForegroundColor Red "BRAK PLIKOW Z ROZSZERZENIEM RAW LUB JPG"
@@ -33,9 +36,10 @@ if (($raw -eq $null) -or ($jpg -eq $null)) {
     exit
 }
 else {
-    $ToDel = Compare-Object  $jpg $raw | ForEach-Object { $_.InputObject} 
+    $ToDel = Compare-Object  $jpg $raw  -Property basename 
     $ToDel | % { 
-        Remove-Item $_.FullName  -WhatIf
+    $remove = $_.basename
+        Remove-Item "$Folder\$remove.raw"  -WhatIf
         $count++
     }
 
