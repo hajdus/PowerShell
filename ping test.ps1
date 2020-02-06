@@ -1,0 +1,1 @@
+﻿Test-Connection -Count 9999 -ComputerName 172.21.1.130 | Format-Table @{Name='TimeStamp';Expression={Get-Date}},Address,ProtocolAddress,ResponseTime 
