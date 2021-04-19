@@ -1,0 +1,3 @@
+$outlook = new-object -com Outlook.Application
+$calendar = $outlook.Session.GetDefaultFolder(9)
+$calendar.Items | select ConversationTopic, Start, End, Duration | Export-Csv -Path kalendarz.csv
